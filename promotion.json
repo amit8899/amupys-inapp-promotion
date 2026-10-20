@@ -1,1 +1,21 @@
-
+{                                                                                                                                                                        
+      "toshow": true,                                                                                                                                                        
+      "app_id": "com.amupys.socialbuddy",                                                                                                                               
+      "badge": "FEATURED APP",                                                                                                                                               
+      "title": "Social Media Downloader",                                                                                                                                    
+      "subtitle": "Save Reels, Shorts & HD Videos",                                                                                                                          
+      "rating": "4.8 ★  •  Free",                                                                                                                                            
+      "short_description": "Easily download HD videos, reels, and stories from Instagram, Facebook, TikTok, X (Twitter), and WhatsApp status with one tap. Fast, free, and   
+  watermark-free!",                                                                                                                                                          
+      "icon_url": "https://raw.githubusercontent.com/amit8899/AppPromotion/main/social_icon.png",                                                                            
+      "features": [                                                                                                                                                          
+        "⚡ 3x Faster Video Downloads",                                                                                                                                      
+        "🎬 Save in Full HD & 4K with Audio",                                                                                                                                
+        "✨ 100% Free & No Watermark"                                                                                                                                        
+      ],                                                                                                                                                                     
+      "button_text": "Install Free on Play Store",                                                                                                                           
+      "playstore_link": "https://play.google.com/store/apps/details?id=com.amupys.socialdownloader",                                                                         
+      "cancel_text": "Maybe Later",                                                                                                                                          
+      "cooldown_hours": 24,                                                                                                                                                  
+      "show_chance_percentage": 50                                                                                                                                           
+    } 
