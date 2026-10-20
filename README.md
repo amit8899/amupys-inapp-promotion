@@ -11,10 +11,10 @@ A lightweight, server-driven cross-promotion system for Android applications. It
 2. **Instant Kill-Switch (`toshow`)**: 
    Set `"toshow": false` to instantly hide the promotion globally across all active users.
 3. **Smart & Non-Intrusive Frequency Capping**:
-   - **Daily Limit ("1 Promotion per Day Only")**: Enforces a strict maximum of 1 promotion popup per day using local date tracking (`yyyyMMdd`).
+   - **Daily Impressions Limit (`count_per_day`)**: Configures how many times the dialog can be shown to a user in a single day (e.g., `count_per_day: 2` allows 2 times per day; setting to `3` allows 3 times per day).
    - **Total Duration Cap (`maxDays`)**: Limits promotion visibility to a maximum number of days (e.g., `maxDays: 10`). Once the user has been shown the promotion on 10 distinct days, the popup is permanently stopped.
-   - **Cooldown Timer (`cooldown_hours`)**: Ensures at least 24 hours between popup impressions.
-   - **Randomized Display (`show_chance_percentage`)**: Even on eligible days, a random roll (e.g., 50% probability) prevents showing the dialog on every single session, keeping the user experience clean.
+   - **Cooldown Timer (`cooldown_hours`)**: Ensures pacing between impressions (scaled automatically across the day based on `count_per_day`).
+   - **Randomized Display (`show_chance_percentage`)**: Even on eligible moments, a random roll (e.g., 50% probability) prevents showing the dialog predictably, keeping the user experience clean.
    - **Install Conversion Tracking**: Once a user taps "Install", the app records the package ID and never displays that promotion again.
 4. **Dedicated "More Apps" View in Settings / About**:
    - In addition to dialog popups, a native "MORE APPS" card is displayed in the **About** (`MoreFragment`) tab whenever `"toshow": true`.
@@ -46,6 +46,7 @@ A lightweight, server-driven cross-promotion system for Android applications. It
   "button_text": "Install Free on Play Store",
   "playstore_link": "https://play.google.com/store/apps/details?id=com.amupys.socialdownloader",
   "cancel_text": "Maybe Later",
+  "count_per_day": 2,
   "maxDays": 10,
   "cooldown_hours": 24,
   "show_chance_percentage": 50
@@ -58,6 +59,7 @@ A lightweight, server-driven cross-promotion system for Android applications. It
 |---|---|---|
 | `toshow` | `boolean` | **Master Toggle**. `true` to enable dialog and More Apps view, `false` to disable. |
 | `app_id` | `string` | Google Play package name (e.g. `com.amupys.socialbuddy`). Used to launch the Play Store and track user conversion. |
+| `count_per_day` | `int` | Maximum times the dialog can be shown per day (e.g. `2` or `3`). Defaults to `2`. |
 | `maxDays` | `int` | Maximum number of days the promotion dialog can be shown to a user (e.g. `10`). Defaults to `10`. |
 | `badge` | `string` | Top highlight badge (e.g. `"FEATURED APP"`, `"NEW RELEASE"`). |
 | `title` | `string` | App title displayed in the dialog header and More Apps section. |
@@ -69,7 +71,7 @@ A lightweight, server-driven cross-promotion system for Android applications. It
 | `button_text` | `string` | Call-To-Action (CTA) button label. |
 | `playstore_link` | `string` | Web URL fallback if Play Store app cannot be opened directly. |
 | `cancel_text` | `string` | Dismiss button label (e.g. `"Maybe Later"`). |
-| `cooldown_hours` | `int` | Minimum hours to wait between impressions (default `24`). |
+| `cooldown_hours` | `int` | Base cooldown hours between impressions (default `24`). |
 | `show_chance_percentage` | `int` | Random chance percentage (`1–100`) to show when eligible (default `50`). |
 
 ---

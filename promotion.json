@@ -16,6 +16,7 @@
   "button_text": "Install Free on Play Store",
   "playstore_link": "https://play.google.com/store/apps/details?id=com.amupys.socialdownloader",
   "cancel_text": "Maybe Later",
+  "count_per_day": 2,
   "maxDays": 10,
   "cooldown_hours": 24,
   "show_chance_percentage": 50
