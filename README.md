@@ -11,10 +11,15 @@ A lightweight, server-driven cross-promotion system for Android applications. It
 2. **Instant Kill-Switch (`toshow`)**: 
    Set `"toshow": false` to instantly hide the promotion globally across all active users.
 3. **Smart & Non-Intrusive Frequency Capping**:
-   - **Cooldown Timer (`cooldown_hours`)**: Ensures the dialog is only eligible to show after a specified interval (e.g., 24 hours).
-   - **Randomized Display (`show_chance_percentage`)**: Even after cooldown, a random roll (e.g., 50% probability) prevents showing the dialog on every single session, keeping the user experience clean.
+   - **Daily Limit ("1 Promotion per Day Only")**: Enforces a strict maximum of 1 promotion popup per day using local date tracking (`yyyyMMdd`).
+   - **Total Duration Cap (`maxDays`)**: Limits promotion visibility to a maximum number of days (e.g., `maxDays: 10`). Once the user has been shown the promotion on 10 distinct days, the popup is permanently stopped.
+   - **Cooldown Timer (`cooldown_hours`)**: Ensures at least 24 hours between popup impressions.
+   - **Randomized Display (`show_chance_percentage`)**: Even on eligible days, a random roll (e.g., 50% probability) prevents showing the dialog on every single session, keeping the user experience clean.
    - **Install Conversion Tracking**: Once a user taps "Install", the app records the package ID and never displays that promotion again.
-4. **Offline Resilience & Fast Performance**:
+4. **Dedicated "More Apps" View in Settings / About**:
+   - In addition to dialog popups, a native "MORE APPS" card is displayed in the **About** (`MoreFragment`) tab whenever `"toshow": true`.
+   - Displays the promoted app's logo, title, description, badge, and a direct "GET" action button.
+5. **Offline Resilience & Fast Performance**:
    - The config is cached in Android `SharedPreferences`.
    - Network calls run on background threads using OkHttp and never block the main UI thread.
 
@@ -31,7 +36,8 @@ A lightweight, server-driven cross-promotion system for Android applications. It
   "subtitle": "Save Reels, Shorts & HD Videos",
   "rating": "4.8 ★  •  Free",
   "short_description": "Easily download HD videos, reels, and stories from Instagram, Facebook, TikTok, X (Twitter), and WhatsApp status with one tap. Fast, free, and watermark-free!",
-  "icon_url": "https://raw.githubusercontent.com/amit8899/AppPromotion/main/social_icon.png",
+  "icon_url": "https://amupys.amupys-web.workers.dev/assets/apps/social/social_logo_512.jpg",
+  "app_icon_url": "https://amupys.amupys-web.workers.dev/assets/apps/social/social_logo_512.jpg",
   "features": [
     "⚡ 3x Faster Video Downloads",
     "🎬 Save in Full HD & 4K with Audio",
@@ -40,6 +46,7 @@ A lightweight, server-driven cross-promotion system for Android applications. It
   "button_text": "Install Free on Play Store",
   "playstore_link": "https://play.google.com/store/apps/details?id=com.amupys.socialdownloader",
   "cancel_text": "Maybe Later",
+  "maxDays": 10,
   "cooldown_hours": 24,
   "show_chance_percentage": 50
 }
@@ -49,14 +56,15 @@ A lightweight, server-driven cross-promotion system for Android applications. It
 
 | Field | Type | Description |
 |---|---|---|
-| `toshow` | `boolean` | **Master Toggle**. `true` to enable dialog, `false` to disable. |
+| `toshow` | `boolean` | **Master Toggle**. `true` to enable dialog and More Apps view, `false` to disable. |
 | `app_id` | `string` | Google Play package name (e.g. `com.amupys.socialbuddy`). Used to launch the Play Store and track user conversion. |
+| `maxDays` | `int` | Maximum number of days the promotion dialog can be shown to a user (e.g. `10`). Defaults to `10`. |
 | `badge` | `string` | Top highlight badge (e.g. `"FEATURED APP"`, `"NEW RELEASE"`). |
-| `title` | `string` | App title displayed in the dialog header. |
+| `title` | `string` | App title displayed in the dialog header and More Apps section. |
 | `subtitle` | `string` | Catchy slogan or short subtitle. |
 | `rating` | `string` | Social proof indicator (e.g. `"4.8 ★  •  Free"`). |
 | `short_description` | `string` | 1–2 sentence summary highlighting app benefits. |
-| `icon_url` | `string` | Direct image URL for the app icon (dynamically loaded via Glide with fallback). |
+| `icon_url` / `app_icon_url` | `string` | Direct image URL for the app icon (dynamically loaded via Glide with fallback). |
 | `features` | `array` | Up to 3 feature bullet points. |
 | `button_text` | `string` | Call-To-Action (CTA) button label. |
 | `playstore_link` | `string` | Web URL fallback if Play Store app cannot be opened directly. |
@@ -92,16 +100,11 @@ protected void onCreate(Bundle savedInstanceState) {
 PromotionManager.maybeShowOnDownload(hostActivity);
 ```
 
-### 3. Architecture
-
-- **`PromotionManager.java`**: Handles network fetch via OkHttp, response caching, eligibility evaluation, and Play Store redirection (`market://details?id=...`).
-- **`dialog_app_promotion.xml`**: Dark-themed custom dialog layout matching app styling.
-- **Drawables**:
-  - `promo_dialog_bg.xml`: 24dp rounded dark surface.
-  - `promo_badge_bg.xml`: Vibrant gradient pill badge.
-  - `promo_btn_install_bg.xml`: Rounded gradient CTA button with ripple effect.
-  - `promo_feature_item_bg.xml`: Dark feature bullet pills.
-  - `ic_promo_default_app.xml`: Vector fallback icon.
+#### More Apps Section (`MoreFragment.java`)
+```java
+// Dynamically binds and displays the promoted app row in the About tab
+PromotionManager.setupMoreAppsView(view, getActivity());
+```
 
 ---
 
